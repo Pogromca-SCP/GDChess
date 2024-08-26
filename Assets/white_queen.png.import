@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bto1uossfy2m2"
-path="res://.godot/imported/white_queen.png-fad857e9b546f8402de4306cc3dd8547.ctex"
+path="res://.godot/imported/white_queen.png-008c5bd342ab5fcdc00e3acd66e0bbfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/white_queen.png"
-dest_files=["res://.godot/imported/white_queen.png-fad857e9b546f8402de4306cc3dd8547.ctex"]
+source_file="res://assets/white_queen.png"
+dest_files=["res://.godot/imported/white_queen.png-008c5bd342ab5fcdc00e3acd66e0bbfd.ctex"]
 
 [params]
 

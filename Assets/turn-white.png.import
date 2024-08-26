@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://u0av5560mbtv"
-path="res://.godot/imported/turn-white.png-a60a35acaa8abb5142ee3dfd6b3ec1e5.ctex"
+path="res://.godot/imported/turn-white.png-0132a4675ab2d75120cb23e944f25dc0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/turn-white.png"
-dest_files=["res://.godot/imported/turn-white.png-a60a35acaa8abb5142ee3dfd6b3ec1e5.ctex"]
+source_file="res://assets/turn-white.png"
+dest_files=["res://.godot/imported/turn-white.png-0132a4675ab2d75120cb23e944f25dc0.ctex"]
 
 [params]
 
