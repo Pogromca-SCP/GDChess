@@ -25,7 +25,6 @@ public partial class CSHost : CanvasLayer
     #region Node API
     public override void _Ready()
     {
-        base._Ready();
         IPBox = GetNode<TextEdit>("IP");
         Join = GetNode<Button>("Join");
         Host = GetNode<Button>("Host");
@@ -83,10 +82,7 @@ public partial class CSHost : CanvasLayer
         Multiplayer.MultiplayerPeer = null;
     }
 
-    public void RemoveMultiplayerPeer()
-    {
-        Multiplayer.MultiplayerPeer = null;
-    }
+    public void RemoveMultiplayerPeer() => Multiplayer.MultiplayerPeer = null;
 
     public void StartSoloGame()
     {
@@ -100,15 +96,9 @@ public partial class CSHost : CanvasLayer
         Board.Visible = true;
     }
 
-    private void OnPlayerConnected(long id)
-    {
-        RpcId(id, nameof(RegisterPlayer));
-    }
+    private void OnPlayerConnected(long id) => RpcId(id, nameof(RegisterPlayer));
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-    private void RegisterPlayer()
-    {
-        PlayerLoaded();
-    }
+    private void RegisterPlayer() => PlayerLoaded();
     #endregion
 }
