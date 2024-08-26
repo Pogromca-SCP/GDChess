@@ -116,7 +116,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if !(event is InputEventMouseButton) || !event.pressed || promotion_square != null || \
-			event.button_index != MOUSE_BUTTON_LEFT || is_mouse_out():
+			event.button_index != MOUSE_BUTTON_LEFT || is_mouse_out() || !is_my_turn():
 		return
 	
 	var mouse_pos: Vector2 = get_global_mouse_position()
@@ -124,9 +124,16 @@ func _input(event: InputEvent) -> void:
 	var x: int = abs(snapped(mouse_pos.y, 0)) / CELL_WIDTH
 	
 	if choosing_move:
-		set_move(x, y)
+		if multiplayer.multiplayer_peer == null:
+			set_move(x, y)
+		else:
+			set_move.rpc(x, y)
 	elif is_same_team(board[x][y]):
-		selected_piece = Vector2(x, y)
+		if multiplayer.multiplayer_peer == null:
+			simulate_options(x, y)
+		else:
+			simulate_options.rpc(x, y)
+		
 		show_options()
 		choosing_move = true
 #endregion
@@ -169,9 +176,13 @@ func display_board() -> void:
 	turn.texture = TURN_WHITE if is_white_turn else TURN_BLACK
 
 
-func show_options() -> void:
+@rpc("any_peer", "call_local", "reliable")
+func simulate_options(x: int, y: int) -> void:
+	selected_piece = Vector2(x, y)
 	moves = get_moves(selected_piece)
-	
+
+
+func show_options() -> void:
 	if moves.is_empty():
 		choosing_move = false
 		return
@@ -194,6 +205,7 @@ func delete_dots() -> void:
 #endregion
 
 #region Movement
+@rpc("any_peer", "call_local", "reliable")
 func set_move(x: int, y: int) -> void:
 	var just_now: bool = false
 	
@@ -221,8 +233,13 @@ func set_move(x: int, y: int) -> void:
 	delete_dots()
 	choosing_move = false
 	
-	if (selected_piece.x != x || selected_piece.y != y) && is_same_team(board[x][y]):
-		selected_piece = Vector2(x, y)
+	if is_my_turn() && (selected_piece.x != x || selected_piece.y != y) && \
+			is_same_team(board[x][y]):
+		if multiplayer.multiplayer_peer == null:
+			simulate_options(x, y)
+		else:
+			simulate_options.rpc(x, y)
+		
 		show_options()
 		choosing_move = true
 
@@ -462,6 +479,11 @@ func validate_en_passant(piece: int, pos: Vector2, piece_pos: Vector2) -> bool:
 #endregion
 
 #region Misc
+func is_my_turn() -> bool:
+	return multiplayer.multiplayer_peer == null || (is_white_turn if multiplayer.is_server() else \
+			!is_white_turn)
+
+
 func is_valid_position(pos: Vector2) -> bool:
 	return pos.x >= 0 && pos.x < BOARD_SIZE && pos.y >= 0 && pos.y < BOARD_SIZE
 
@@ -480,13 +502,26 @@ func is_enemy(pos: Vector2) -> bool:
 
 func promote(pos: Vector2) -> void:
 	promotion_square = pos
+	
+	if !is_my_turn():
+		return
+	
 	white_pieces.visible = is_white_turn
 	black_pieces.visible = !is_white_turn
 
 
 func _on_button_pressed(button: Button) -> void:
 	var num_char: int = int(button.name.substr(0, 1))
-	board[promotion_square.x][promotion_square.y] = -num_char if is_white_turn else num_char
+	
+	if multiplayer.multiplayer_peer == null:
+		promotion(num_char)
+	else:
+		promotion.rpc(num_char)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func promotion(num: int) -> void:
+	board[promotion_square.x][promotion_square.y] = -num if is_white_turn else num
 	white_pieces.visible = false
 	black_pieces.visible = false
 	promotion_square = null

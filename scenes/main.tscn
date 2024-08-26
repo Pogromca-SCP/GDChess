@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b18o0tjpylsgl"]
+[gd_scene load_steps=25 format=3 uid="uid://b18o0tjpylsgl"]
 
 [ext_resource type="PackedScene" uid="uid://d1w6fao3nlu3n" path="res://scenes/board.tscn" id="1_fr0a5"]
 [ext_resource type="Texture2D" uid="uid://ti8w3dgce4ij" path="res://assets/white_rook.png" id="1_oqt5c"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ciryl7iwvkycu" path="res://assets/black_knight.png" id="6_kg2av"]
 [ext_resource type="Texture2D" uid="uid://c1r4d4hdiyin6" path="res://assets/black_bishop.png" id="7_85hgd"]
 [ext_resource type="Texture2D" uid="uid://b5hsog8r37ln7" path="res://assets/black_queen.png" id="8_awx35"]
+[ext_resource type="PackedScene" uid="uid://bwexeoss8ilgn" path="res://scenes/menu.tscn" id="9_q5l2r"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5lcen"]
 texture = ExtResource("2_kph43")
@@ -174,5 +175,8 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_s583t")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_ftudr")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_yyltm")
 
+[node name="Menu" parent="." instance=ExtResource("9_q5l2r")]
+
 [node name="Board" parent="." instance=ExtResource("1_fr0a5")]
+visible = false
 position = Vector2(72, -72)

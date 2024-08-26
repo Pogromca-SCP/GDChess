@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwexeoss8ilgn"]
+
+[ext_resource type="Script" path="res://scripts/host.gd" id="1_3mnnx"]
+
+[node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_3mnnx")
+
+[node name="IP" type="TextEdit" parent="."]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 182.0
+offset_bottom = 45.0
+placeholder_text = "Enter IP address..."
+
+[node name="Host" type="Button" parent="."]
+offset_left = 10.0
+offset_top = 85.0
+offset_right = 118.0
+offset_bottom = 116.0
+text = "HOST"
+
+[node name="Join" type="Button" parent="."]
+offset_left = 10.0
+offset_top = 50.0
+offset_right = 118.0
+offset_bottom = 81.0
+text = "JOIN"
+
+[node name="Solo" type="Button" parent="."]
+offset_left = 10.0
+offset_top = 120.175
+offset_right = 118.0
+offset_bottom = 151.175
+text = "SOLO PLAY"
