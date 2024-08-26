@@ -1,4 +1,4 @@
-extends Node
+extends CanvasLayer
 
 #region Data
 const PORT = 7000
@@ -21,7 +21,7 @@ var solo: Button = $Solo
 var board: Sprite2D = $"../Board"
 #endregion
 
-#region Shitty networking
+#region Node API
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(close_game)
@@ -30,8 +30,9 @@ func _ready() -> void:
 	join.pressed.connect(join_game)
 	host.pressed.connect(create_game)
 	solo.pressed.connect(start_solo_game)
+#endregion
 
-
+#region Shitty networking
 func join_game() -> void:
 	var address: String = ip_box.text
 	
@@ -41,7 +42,7 @@ func join_game() -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = peer.create_client(address, PORT)
 	
-	if error:
+	if error != Error.OK:
 		print(error)
 		return
 	
@@ -52,7 +53,7 @@ func create_game() -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = peer.create_server(PORT, MAX_CONNECTIONS)
 	
-	if error:
+	if error != Error.OK:
 		print(error)
 		return
 	
@@ -74,7 +75,7 @@ func start_solo_game():
 
 
 func player_loaded():
-	self.visible = false
+	visible = false
 	board.visible = true
 
 
