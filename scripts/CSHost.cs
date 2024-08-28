@@ -98,7 +98,7 @@ public partial class CSHost : CanvasLayer
 
     private void OnPlayerConnected(long id) => RpcId(id, nameof(RegisterPlayer));
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     private void RegisterPlayer() => PlayerLoaded();
     #endregion
 }

@@ -104,14 +104,10 @@ func _ready() -> void:
 	board.append([-Pieces.ROOK, -Pieces.KNIGHT, -Pieces.BISHOP, -Pieces.QUEEN, -Pieces.KING,
 			-Pieces.BISHOP, -Pieces.KNIGHT, -Pieces.ROOK])
 	display_board()
-	var white_buttons: Array[Node] = get_tree().get_nodes_in_group("white_pieces")
-	var black_buttons: Array[Node] = get_tree().get_nodes_in_group("black_pieces")
 	
-	for button in white_buttons:
-		button.pressed.connect(_on_button_pressed.bind(button))
-	
-	for button in black_buttons:
-		button.pressed.connect(_on_button_pressed.bind(button))
+	for group in ["white_pieces", "black_pieces"]:
+		for button in get_tree().get_nodes_in_group(group):
+			button.pressed.connect(_on_button_pressed.bind(button))
 
 
 func _input(event: InputEvent) -> void:
@@ -245,7 +241,6 @@ func set_move(x: int, y: int) -> void:
 
 
 func move_pawn(move: Vector2) -> bool:
-	var just_now: bool = false
 	var promotion_row: int = BOARD_SIZE - 1 if is_white_turn else 0
 	var start_position: int = 1 if is_white_turn else BOARD_SIZE - 2
 	var middle_row: int = 3 if is_white_turn else 4
@@ -254,12 +249,12 @@ func move_pawn(move: Vector2) -> bool:
 		promote(move)
 	elif move.x == middle_row && selected_piece.x == start_position:
 		en_passant = move
-		just_now = true
+		return true
 	elif en_passant != null && en_passant.y == move.y && selected_piece.y != move.y && \
 			en_passant.x == selected_piece.x:
 		board[en_passant.x][en_passant.y] = Pieces.NONE
 	
-	return just_now
+	return false
 
 
 func move_rook() -> void:
@@ -394,10 +389,10 @@ func get_pawn_moves(piece_pos: Vector2) -> Array[Vector2]:
 	var middle_row: int = 4 if is_white_turn else 3
 	
 	if en_passant != null && piece_pos.x == middle_row && abs(en_passant.y - piece_pos.y) == 1:
-		var pos: Vector2 = en_passant + direction
+		var inner_pos: Vector2 = en_passant + direction
 		
-		if validate_en_passant(Pieces.PAWN, pos, piece_pos):
-			available_moves.append(pos)
+		if validate_en_passant(Pieces.PAWN, inner_pos, piece_pos):
+			available_moves.append(inner_pos)
 	
 	var pos: Vector2 = piece_pos + direction
 	
@@ -484,7 +479,7 @@ func is_my_turn() -> bool:
 			!is_white_turn)
 
 
-func is_valid_position(pos: Vector2) -> bool:
+static func is_valid_position(pos: Vector2) -> bool:
 	return pos.x >= 0 && pos.x < BOARD_SIZE && pos.y >= 0 && pos.y < BOARD_SIZE
 
 
